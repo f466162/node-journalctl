@@ -6,9 +6,19 @@ const JSONStream = require('./json-stream.js');
 function Journalctl (opts) {
 	EventEmitter.call(this);
 
-	// Decode opts
-	const args = ['-f', '-o', 'json'];
+	// Initialize fail-safe default if opts missing
 	if (opts === undefined) opts = {};
+
+	// Initialize args
+	const args = [];
+
+	// Do we follow the journal? Add as first arg to honor args ordering
+	if (!opts.nofollow) args.push('-f');
+
+	// Add JSON output format
+	args.push('-o', 'json');
+
+	// Decode opts
 	if (opts.all) args.push('-a');
 	if (opts.lines) args.push('-n', opts.lines);
 	if (opts.since) args.push('-S', opts.since);

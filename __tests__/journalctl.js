@@ -97,3 +97,18 @@ test('specify multiple filter', () => {
 	]);
 	expect(j).toBeInstanceOf(EventEmitter);
 });
+
+test('nofollow for a single line', () => {
+	const LINES = '1';
+	const NOFOLLOW = 'true';
+	const j = new Journalctl({
+		lines: LINES,
+		nofollow: NOFOLLOW
+	});
+	expect(childProcess.spawn.mock.calls.length).toBe(1);
+	expect(childProcess.spawn.mock.calls[0]).toEqual([
+		'journalctl',
+		['-o', 'json', '-n', LINES]
+	]);
+	expect(j).toBeInstanceOf(EventEmitter);
+});
